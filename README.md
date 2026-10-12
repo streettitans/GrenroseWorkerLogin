@@ -23,8 +23,11 @@ Email delivery runs in the shared backend. The owner supplied `streettitans2020@
 
 Both repositories must be released together with matching API origins. Only `/api/worker/*` and `/api/account/*` are proxied; no admin API proxy is exposed. Deploy behind a controlled HTTPS gateway with forwarding-header sanitation and edge rate limits. Read `GrenroseAdmin/docs/SITE-REGISTER-DEPLOYMENT.md` for storage, backup/restore and operational checks.
 
-Before deployment, review the Next.js upstream security update planned for **14 October 2026**, update affected packages to the patched version and rerun checks: https://nextjs.org/blog/upcoming-nextjs-security-update-october-2026 . Affected versions are not yet published as of 12 October.
 
 ## Checks
 
 `pnpm build` and `pnpm type-check`. GitHub CI runs both on Linux. Backend integration tests in GrenroseAdmin cover the shared contract, concurrency, QR revocation, account reset/session revocation, reports and roll call. The active portal components and request helper are mirrored from `GrenroseAdmin/src/site`; keep those copies aligned when changing the shared UI contract.
+
+## Release package
+
+The Dockerfile builds a standalone Next.js server with API_INTERNAL_URL set at build time. Only the HTTPS edge should be public. The unused legacy Tailwind dependency was removed; the active portal uses its shared CSS. Attendance history is paginated and action errors are separate from session-refresh warnings. Refer to GrenroseAdmin/docs/PRODUCTION-OPERATIONS.md for coordinated deployment and the real-device acceptance record.

@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
   reactStrictMode: true,
   async rewrites() {
     const target = process.env.API_INTERNAL_URL || 'http://127.0.0.1:3001';

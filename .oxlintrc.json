@@ -1,0 +1,3 @@
+{
+  "rules": {"unicorn/no-invalid-fetch-options": "off"}
+}
