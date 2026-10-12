@@ -1,114 +1,30 @@
-# Grenrose Worker Login
+# Grenrose Worker Portal
 
-A modern, responsive worker portal for clocking in/out, managing shifts, and tracking work hours.
+The separate worker website connects to the persistent API in `streettitans/GrenroseAdmin`. Workers sign in with email/password after an administrator creates their account and confirms company/site assignments. Sessions use HttpOnly cookies through this site's API proxy; no bearer token or attendance record is stored in localStorage.
 
-## Features
+## Run locally
 
-- ✨ **Modern UI** - Built with Tailwind CSS and React
-- 🔐 **Secure Login** - Worker authentication with JWT tokens
-- ⏱️ **Time Tracking** - Easy clock in/out functionality
-- 📅 **Shift Management** - View and manage your work schedule
-- ⏰ **Timesheets** - Track and review your work hours
-- 📊 **Analytics** - View statistics and performance metrics
-- 📱 **Responsive Design** - Perfect on all devices
-- ⚡ **Fast Performance** - Optimized with Next.js 14
-- 🎯 **TypeScript** - Full type safety
+- Node 22.23+ and pnpm 10.34.3.
+- In GrenroseAdmin, start the API (default 3001), set its `WORKER_ORIGIN=http://localhost:3002`, provision the first administrator and create real site/worker records.
+- Copy `.env.example` to `.env.local` and set `API_INTERNAL_URL` to that API's internal origin. This variable is server-only and must be set **before building**, because Next.js compiles rewrite destinations.
+- `pnpm install --frozen-lockfile --ignore-scripts`, then `pnpm dev` (worker port 3002). For production: `pnpm build`, then `pnpm start` behind HTTPS.
 
-## Tech Stack
+## Worker journeys
 
-- **Frontend**: Next.js 14, React 18, TypeScript
-- **State Management**: Zustand
-- **Styling**: Tailwind CSS
-- **HTTP Client**: Axios
-- **Date Handling**: date-fns
-- **Icons**: Lucide React
+`/`, `/login` and `/dashboard` open the worker portal; `/shifts` and `/timesheets` open attendance history. These show actual attendance, not fabricated scheduled shifts. `/forgot-password` requests account recovery; `/reset-password?token=...` accepts a one-use invitation/recovery token.
 
-## Getting Started
+Scan the current site QR code at the entrance, sign in, then choose **Share location & check in**. You must be assigned to the active site. The server validates freshness and reported accuracy/coordinates; one worker cannot have two open attendance records. Check-out closes the same server record used by admin live registers and reports. An active emergency roll call pauses new site check-ins.
 
-### Prerequisites
+The portal refreshes every five seconds and flags connection failures. GPS remains reported device data and can be spoofed; it is not independently verified proof of presence. Real-device/HTTPS/location-permission testing remains a release requirement.
 
-- Node.js 18+ and npm/yarn/pnpm
+## Recovery and security
 
-### Installation
+Email delivery runs in the shared backend. The owner supplied `streettitans2020@gmail.com` as sender; its credentials must be added securely at deployment. No email credentials or default/demo worker passwords are committed. Missing delivery returns an unavailable state rather than a fake success.
 
-```bash
-# Clone the repository
-git clone https://github.com/streettitans/GrenroseWorkerLogin
-cd GrenroseWorkerLogin
+Both repositories must be released together with matching API origins. Only `/api/worker/*` and `/api/account/*` are proxied; no admin API proxy is exposed. Deploy behind a controlled HTTPS gateway with forwarding-header sanitation and edge rate limits. Read `GrenroseAdmin/docs/SITE-REGISTER-DEPLOYMENT.md` for storage, backup/restore and operational checks.
 
-# Install dependencies
-npm install
+Before deployment, review the Next.js upstream security update planned for **14 October 2026**, update affected packages to the patched version and rerun checks: https://nextjs.org/blog/upcoming-nextjs-security-update-october-2026 . Affected versions are not yet published as of 12 October.
 
-# Create environment file
-cp .env.example .env.local
+## Checks
 
-# Start development server (runs on port 3001)
-npm run dev
-```
-
-Visit [http://localhost:3001](http://localhost:3001) in your browser.
-
-## Configuration
-
-Create a `.env.local` file:
-
-```env
-NEXT_PUBLIC_API_URL=http://localhost:3001
-```
-
-## Project Structure
-
-```
-src/
-├── app/                  # Next.js app directory
-│   ├── dashboard/       # Dashboard pages
-│   ├── shifts/         # Shift management pages
-│   ├── login/          # Login page
-│   ├── layout.tsx      # Root layout
-│   └── page.tsx        # Home page
-├── components/          # React components
-│   ├── Navbar.tsx      # Navigation component
-│   └── ShiftClock.tsx  # Time clock component
-├── lib/                # Utility functions
-│   └── api.ts          # API client
-├── store/              # Zustand stores
-│   └── workerStore.ts  # Worker state management
-```
-
-## Available Scripts
-
-- `npm run dev` - Start development server (port 3001)
-- `npm run build` - Build for production
-- `npm start` - Start production server
-- `npm run lint` - Run ESLint
-- `npm run type-check` - Check TypeScript types
-
-## Demo Credentials
-
-```
-Worker ID: WRK001
-Password: password123
-```
-
-## API Integration
-
-Ensure your backend API is running on `NEXT_PUBLIC_API_URL`.
-
-### Required Endpoints
-
-- `POST /worker/login` - Worker login
-- `GET /worker/me` - Get current worker
-- `GET /worker/shifts` - List shifts
-- `POST /worker/clock-in` - Clock in
-- `POST /worker/clock-out` - Clock out
-
-## Contributing
-
-1. Create a feature branch
-2. Commit changes
-3. Push to branch
-4. Open a Pull Request
-
-## License
-
-Proprietary and confidential.
+`pnpm build` and `pnpm type-check`. GitHub CI runs both on Linux. Backend integration tests in GrenroseAdmin cover the shared contract, concurrency, QR revocation, account reset/session revocation, reports and roll call. The active portal components and request helper are mirrored from `GrenroseAdmin/src/site`; keep those copies aligned when changing the shared UI contract.
