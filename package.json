@@ -4,28 +4,25 @@
   "private": true,
   "description": "Grenrose Worker Login & Shift Tracking",
   "scripts": {
-    "dev": "next dev -p 3001",
+    "dev": "next dev -p 3002",
     "build": "next build",
-    "start": "next start -p 3001",
-    "lint": "next lint",
+    "start": "next start -p 3002",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "react": "^18.3.0",
-    "react-dom": "^18.3.0",
-    "next": "^14.0.0",
-    "axios": "^1.6.0",
-    "zustand": "^4.4.0",
-    "tailwindcss": "^3.3.0",
-    "lucide-react": "^0.294.0",
-    "date-fns": "^2.30.0"
+    "next": "^16.4.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "tailwindcss": "^3.3.0"
   },
   "devDependencies": {
-    "typescript": "^5.3.0",
-    "@types/react": "^18.3.0",
-    "@types/react-dom": "^18.3.0",
     "@types/node": "^20.0.0",
-    "eslint": "^8.52.0",
-    "eslint-config-next": "^14.0.0"
-  }
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "typescript": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=22.23.0"
+  },
+  "packageManager": "pnpm@10.34.3"
 }
