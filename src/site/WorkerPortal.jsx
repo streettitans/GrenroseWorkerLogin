@@ -221,7 +221,7 @@ export default function WorkerPortal({ standalone = false }) {
   if (!session)
     return (
       <main className="sr-app sr-auth">
-        <h1>Grenrose Worker Portal</h1>
+        <h1>Grenrose Worker Portal</h1><p><a href="/privacy">How Grenrose uses attendance and location information</a></p>
         <h2>Sign in to your site register</h2>
         <p>
           Use the email and password set through your invitation. Site attendance is stored in the
@@ -317,7 +317,7 @@ export default function WorkerPortal({ standalone = false }) {
             </section>
           ) : (
             <section className="sr-card">
-              <h2>Check in at your site</h2>
+              <h2>Check in at your site</h2><p><a href="/privacy">Read the attendance and location privacy notice</a></p>
               <p>
                 Scan the QR code at the entrance with your phone camera. You can also paste the full
                 QR link below.
@@ -415,3 +415,4 @@ export default function WorkerPortal({ standalone = false }) {
     </main>
   );
 }
+
