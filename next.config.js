@@ -1,11 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
   reactStrictMode: true,
   async rewrites() {
     const target = process.env.API_INTERNAL_URL || 'http://127.0.0.1:3001';
     const url = new URL(target);
     if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password || url.pathname !== '/' || url.search || url.hash) throw new Error('API_INTERNAL_URL must be a server origin without credentials or paths.');
     return [
+      { source: '/api/privacy', destination: `${url.origin}/api/privacy` },
       { source: '/api/worker/:path*', destination: `${url.origin}/api/worker/:path*` },
       { source: '/api/account/:path*', destination: `${url.origin}/api/account/:path*` },
     ];
@@ -22,3 +24,4 @@ const nextConfig = {
   },
 };
 module.exports = nextConfig;
+
