@@ -1,5 +1,9 @@
 # Grenrose Worker Portal
 
+## Site toolbox talks
+
+The signed-in portal includes **Toolbox Talks** for assigned sites: the site's saved Monday selection, additional PDFs uploaded by an administrator, and paginated history. Downloads use authenticated `/api/worker/` routes and recheck assignment. This requires GrenroseAdmin migration 008 and its matching API release; deploy the API first, then this worker app. Workers cannot upload talks. Downloading does not record delivery, attendance or sign-off. This release also updates Next.js to the published 16.4.1 security patch.
+
 The separate worker website connects to the persistent API in `streettitans/GrenroseAdmin`. Workers sign in with email/password after an administrator creates their account and confirms company/site assignments. Sessions use HttpOnly cookies through this site's API proxy; no bearer token or attendance record is stored in localStorage.
 
 ## Run locally
