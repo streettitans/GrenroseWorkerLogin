@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { request } from "../register/api";
 
 import AccountAccess from "./AccountAccess";
+import ToolboxTalks from "./ToolboxTalks";
 
 import "./site.css";
 
@@ -276,6 +277,7 @@ export default function WorkerPortal({ standalone = false }) {
           </p>
         </div>
         <nav>
+          <button className="sr-secondary" onClick={() => setView("toolbox")}>Toolbox Talks</button>
           <button className="sr-secondary" onClick={() => setView("clock")}>
             Site attendance
           </button>
@@ -305,7 +307,7 @@ export default function WorkerPortal({ standalone = false }) {
           : "Shared register refreshes every 5 seconds."}
       </p>
 
-      {view === "clock" ? (
+      {view === "toolbox" ? <ToolboxTalks sites={session.sites} worker /> : view === "clock" ? (
         <>
           {session.current ? (
             <section className="sr-card sr-live">
